@@ -38,20 +38,15 @@ object onlineRecomm {
       Subscribe[String, String](topics, kafkaParams)
     )
 
-    // 保存offset
+    //    todo 消息处理 需要知道消息格式做相应的解析（和中间件的同学确认） 根据电影ID计算相似的20部电影可看下面的例子,计算后的movieRDD 存到hive中
     stream.foreachRDD { rdd =>
       val offsetRanges = rdd.asInstanceOf[HasOffsetRanges].offsetRanges
+
+      // TODO 从hdfs中获取相似度矩阵 获取与电影ID相似的电影 存储到hive 数据库
+
       stream.asInstanceOf[CanCommitOffsets].commitAsync(offsetRanges)
     }
 
-//    todo 消息处理 需要知道消息格式做相应的解析（和中间件的同学确认） 根据电影ID计算相似的20部电影可看下面的例子,计算后的movieRDD 存到hive中
-    stream.map(record=>{
-
-      // 从hdfs中获取相似度矩阵 获取与电影ID相似的电影
-      // 存储到hive 数据库
-
-
-    })
 
     //    // 在线相似度计算举例 例如计算电影ID为12的相似电影
     //    val movieId = "12"
